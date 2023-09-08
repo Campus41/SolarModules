@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSolarModules } from '../redux/actions/solarModulesActions';
 import { RootState } from '../redux/store';
@@ -20,8 +20,6 @@ function SolarModulesComponent() {
 
   const solarModules = useSelector((state: RootState) => state.solarModules.solarModules);
   const solarModulesSelected = useSelector((state: RootState) => state.solarModulesSelected.solarModulesSelected);
-  const [solarModulesFree, setSolarModulesFree] = useState<{ type: string; quantity: number; price: number }[]>([]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -37,11 +35,10 @@ function SolarModulesComponent() {
     dispatch(fetchSolarModules() as any);
   }, [dispatch, solarModulesSelected]);
 
-  useEffect(() => {
-    const modules = solarModules.filter( module => {
-      return !solarModulesSelected.some( item => item.type === module.type)
+  const solarModulesFree = useMemo(() => {
+    return solarModules.filter((module) => {
+      return !solarModulesSelected.some((item) => item.type === module.type);
     });
-    setSolarModulesFree(modules)
   }, [solarModules, solarModulesSelected]);
 
   const addSolarModuleHandler = (module: SolarModule): void => {
