@@ -33,7 +33,7 @@ function SolarModulesComponent() {
 
   useEffect(() => {
     dispatch(fetchSolarModules() as any);
-  }, [dispatch, solarModulesSelected]);
+  }, [dispatch]);
 
   const solarModulesFree = useMemo(() => {
     return solarModules.filter((module) => {
